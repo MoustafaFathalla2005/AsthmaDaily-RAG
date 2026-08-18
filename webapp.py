@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
-import query as q
+import importlib
 import json
 import os
 from pathlib import Path
@@ -27,13 +27,31 @@ EXPOSURE_OPTIONS = ['Dust', 'Smoke', 'Pets', 'Exercise', 'Cold air', 'Strong sme
 
 SUPPORTED_LANGS = ('en', 'ar')
 
-# Load vector DB if available
-try:
-    vectordb = q.load_index()
-    load_error = None
-except Exception as e:
-    vectordb = None
-    load_error = str(e)
+# Lazy-loaded vector DB and query module. Loading `query` at import time pulls
+# in heavy dependencies (transformers/langchain) which can hang startup in some
+# environments. Defer import until the first request that needs the index.
+q = None
+vectordb = None
+load_error = "Vector DB not loaded"
+
+
+def ensure_vectordb_loaded():
+    """Import `query` and load the vector DB on first use.
+
+    Returns (vectordb, load_error). Sets module-level `q`, `vectordb`, `load_error`.
+    """
+    global q, vectordb, load_error
+    if vectordb is not None:
+        return vectordb, load_error
+    try:
+        if q is None:
+            q = importlib.import_module('query')
+        vectordb = q.load_index()
+        load_error = None
+    except Exception as e:
+        vectordb = None
+        load_error = str(e)
+    return vectordb, load_error
 
 # Diary storage
 DATA_DIR = Path("data")
@@ -175,16 +193,18 @@ def ask():
     results = None
     error = None
 
-    if not vectordb:
-        error = f"Vector DB not loaded: {load_error}"
+    # Ensure index is loaded before attempting retrieval.
+    _vectordb, _load_error = ensure_vectordb_loaded()
+    if not _vectordb:
+        error = f"Vector DB not loaded: {_load_error}"
     elif not question:
         error = "Please provide a question."
     else:
         try:
             if use_source_aware and age_group == '0-19':
-                results = q.source_aware_retrieve(vectordb, question, age_group=age_group, k=k)
+                results = q.source_aware_retrieve(_vectordb, question, age_group=age_group, k=k)
             else:
-                results = q.retrieve(vectordb, question, k=k, source=source, age_group=age_group, topic=topic)
+                results = q.retrieve(_vectordb, question, k=k, source=source, age_group=age_group, topic=topic)
         except Exception as e:
             error = str(e)
 
