@@ -1,31 +1,38 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ lang }}" dir="{{ 'rtl' if is_rtl else 'ltr' }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AsthmaDaily</title>
+    <title>{% block title %}{{ t('brand') }}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
   </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+  <body class="{{ 'lang-ar' if is_rtl else 'lang-en' }}">
+    <nav class="navbar navbar-expand-lg app-navbar sticky-top">
       <div class="container content">
-        <a class="navbar-brand" href="/">AsthmaDaily</a>
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="/diary">Daily Diary</a></li>
-            <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="/ask_form">Clinical Q&amp;A</a></li>
+        <a class="navbar-brand" href="/">
+          <span class="brand-mark"><i class="bi bi-lungs-fill"></i></span>
+          {{ t('brand') }}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNav"
+                aria-controls="appNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="appNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-1">
+            <li class="nav-item"><a class="nav-link" href="/diary"><i class="bi bi-journal-text"></i>{{ t('nav_diary') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i>{{ t('nav_dashboard') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="/ask_form"><i class="bi bi-question-circle"></i>{{ t('nav_ask') }}</a></li>
           </ul>
-          <form class="d-flex" action="/" method="get">
-            <div class="btn-group me-2">
-              <a class="btn btn-outline-primary" href="/?lang=en">EN</a>
-              <a class="btn btn-outline-primary" href="/?lang=ar">AR</a>
+          <div class="d-flex align-items-center gap-2 nav-actions">
+            <div class="lang-switch btn-group" role="group" aria-label="Language">
+              <a class="btn btn-lang {{ 'active' if not is_rtl }}" href="/?lang=en">EN</a>
+              <a class="btn btn-lang {{ 'active' if is_rtl }}" href="/?lang=ar">AR</a>
             </div>
-            <a class="btn btn-outline-primary" href="/">Home</a>
-          </form>
+            <a class="btn btn-outline-primary btn-sm" href="/"><i class="bi bi-house-door"></i>{{ t('nav_home') }}</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -36,39 +43,8 @@
     <div class="toast-container" id="toastContainer"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      // show toast helper
-      function showToast(message){
-        const container = document.getElementById('toastContainer');
-        const toastEl = document.createElement('div');
-        toastEl.className='toast align-items-center text-bg-primary border-0';
-        toastEl.setAttribute('role','alert');
-        toastEl.setAttribute('aria-live','assertive');
-        toastEl.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
-        container.appendChild(toastEl);
-        const t = new bootstrap.Toast(toastEl,{delay:3000});
-        t.show();
-      }
-      // automatically show saved toast if present
-      (function(){
-        const params = new URLSearchParams(window.location.search);
-        // language handling (persist via cookie)
-        if(params.get('lang')){
-          document.cookie = `lang=${params.get('lang')}; path=/`;
-        }
-        const lang = (document.cookie.match(/(^|;)\s*lang=([^;]+)/)||[])[2] || 'en';
-        if(lang==='ar'){
-          document.documentElement.dir = 'rtl';
-          document.getElementById('mainContent').classList.add('rtl');
-        }
-        if(params.get('saved')){
-          showToast(lang==='ar' ? 'تم حفظ الإدخال' : 'Entry saved');
-          // remove saved param without reload
-          params.delete('saved');
-          const newurl = window.location.pathname + (params.toString() ? '?'+params.toString() : '');
-          window.history.replaceState({}, document.title, newurl);
-        }
-      })();
+      window.APP_I18N = { saved: {{ t('toast_saved')|tojson }} };
     </script>
-
+    <script src="/static/app.js"></script>
   </body>
 </html>

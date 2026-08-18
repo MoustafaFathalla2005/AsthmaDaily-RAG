@@ -1,18 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="hero mb-3 p-4 d-flex align-items-center gap-3">
-    <div>
-      <h1>AsthmaDaily</h1>
-      <p class="lead">سجّل حالتك يومياً في دقيقة واحدة — واستخدم المساعدة السريرية المبنية على إرشادات موثوقة.</p>
-      <div class="mt-3">
-        <a class="btn btn-primary" href="/diary"><i class="bi bi-journal-text me-1"></i> سجل اليوم</a>
-        <a class="btn btn-outline-primary ms-2" href="/dashboard"><i class="bi bi-speedometer2 me-1"></i> الملخّص</a>
-        <a class="btn btn-outline-secondary ms-2" href="/ask_form"><i class="bi bi-question-circle me-1"></i> اسأل الدليل</a>
+  <div class="hero mb-4">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1>{{ t('brand') }}</h1>
+        <p class="lead">{{ t('home_tagline') }}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="/diary"><i class="bi bi-journal-text me-1"></i>{{ t('home_cta_diary') }}</a>
+          <a class="btn btn-outline-primary btn-lg" href="/dashboard"><i class="bi bi-speedometer2 me-1"></i>{{ t('home_cta_dashboard') }}</a>
+          <a class="btn btn-outline-secondary btn-lg" href="/ask_form"><i class="bi bi-question-circle me-1"></i>{{ t('home_cta_ask') }}</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--primary)"/>
+              <stop offset="100%" stop-color="var(--primary-2)"/>
+            </linearGradient>
+          </defs>
+          <circle cx="110" cy="110" r="100" fill="url(#g1)" opacity="0.12"/>
+          <circle cx="110" cy="110" r="66" fill="url(#g1)" opacity="0.18"/>
+          <path d="M110 55c-6 0-11 5-11 11v18c-16 3-28 17-28 34v33c0 6 5 11 11 11h10a6 6 0 0 0 6-6v-27a6 6 0 0 1 12 0v27a6 6 0 0 0 6 6h10c6 0 11-5 11-11v-33c0-17-12-31-28-34V66c0-6-5-11-11-11z" fill="var(--primary)"/>
+        </svg>
       </div>
     </div>
-    <div class="ms-auto d-none d-md-block" style="width:300px;">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="100%" height="100%" fill="#e9f2ff" rx="12"/></svg>
+  </div>
+
+  <div class="row g-3 feature-grid">
+    <div class="col-md-4">
+      <div class="card feature-card p-3 h-100">
+        <div class="feature-icon"><i class="bi bi-journal-text"></i></div>
+        <h5>{{ t('home_feature_diary_title') }}</h5>
+        <p class="text-muted mb-0">{{ t('home_feature_diary_body') }}</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card p-3 h-100">
+        <div class="feature-icon"><i class="bi bi-speedometer2"></i></div>
+        <h5>{{ t('home_feature_dashboard_title') }}</h5>
+        <p class="text-muted mb-0">{{ t('home_feature_dashboard_body') }}</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card p-3 h-100">
+        <div class="feature-icon"><i class="bi bi-question-circle"></i></div>
+        <h5>{{ t('home_feature_ask_title') }}</h5>
+        <p class="text-muted mb-0">{{ t('home_feature_ask_body') }}</p>
+      </div>
     </div>
   </div>
 {% endblock %}

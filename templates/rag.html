@@ -1,39 +1,47 @@
 {% extends 'base.html' %}
+{% block title %}{{ t('nav_ask') }} — {{ t('brand') }}{% endblock %}
 
 {% block content %}
-  <h1>Clinical Q&A (RAG)</h1>
-  <p class="text-muted">Ask a question and see retrieved guideline passages with source citations.</p>
+  <div class="page-head">
+    <h1>{{ t('rag_title') }}</h1>
+    <p class="text-muted">{{ t('rag_subtitle') }}</p>
+  </div>
 
-  <form action="/ask" method="post" class="mb-4">
+  <form action="/ask" method="post" class="card form-card p-3 p-md-4 mb-4">
     <div class="mb-2">
-      <textarea name="question" class="form-control" rows="3" placeholder="Ask simply, e.g. 'Why do my symptoms get worse after exercise?'">{{ question or '' }}</textarea>
+      <textarea name="question" class="form-control" rows="3" placeholder="{{ t('rag_placeholder') }}">{{ question or '' }}</textarea>
     </div>
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div class="small text-muted">Examples: "exercise and asthma" · "smoke as trigger"</div>
-      <div>
-        <button class="btn btn-primary">Search guidelines</button>
-        <button formaction="/synthesize" formmethod="post" class="btn btn-outline-success ms-2">Summarize + Cite</button>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+      <div class="small text-muted">{{ t('rag_examples') }}</div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary">{{ t('rag_search_btn') }}</button>
+        <button formaction="/synthesize" formmethod="post" class="btn btn-outline-success">{{ t('rag_summarize_btn') }}</button>
       </div>
     </div>
 
     <div class="accordion" id="advancedOptions">
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdv">Advanced options</button>
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdv">{{ t('rag_advanced') }}</button>
         </h2>
         <div id="collapseAdv" class="accordion-collapse collapse" data-bs-parent="#advancedOptions">
           <div class="accordion-body row g-2">
-            <div class="col-md-2"><input name="k" class="form-control" value="3"></div>
+            <div class="col-md-2">
+              <label class="form-label small text-muted">{{ t('rag_topk') }}</label>
+              <input name="k" class="form-control" value="3">
+            </div>
             <div class="col-md-3">
+              <label class="form-label small text-muted">{{ t('rag_source') }}</label>
               <select name="source" class="form-select">
-                <option value="">(any)</option>
+                <option value="">{{ t('rag_source_any') }}</option>
                 <option>GINA</option>
                 <option>WHO</option>
               </select>
             </div>
             <div class="col-md-3">
+              <label class="form-label small text-muted">{{ t('rag_age_group') }}</label>
               <select name="age_group" class="form-select">
-                <option value="">(any)</option>
+                <option value="">{{ t('rag_age_any') }}</option>
                 <option value="0-19">0-19</option>
               </select>
             </div>
@@ -51,48 +59,48 @@
     {% if llm_out %}
       <div class="card mb-3">
         <div class="card-body">
-          <h5>إجابة مُلخّصة (LLM)</h5>
-          <pre style="white-space:pre-wrap;background:transparent;border:none">{{ llm_out.llm }}</pre>
+          <h5>{{ t('rag_llm_title') }}</h5>
+          <pre class="llm-answer">{{ llm_out.llm }}</pre>
         </div>
       </div>
     {% elif synthesized %}
       <div class="card mb-3">
         <div class="card-body">
-          <h5>Summarized answer</h5>
-          {% if synthesized is mapping %}
+          <h5>{{ t('rag_summarized_title') }}</h5>
+          {% if synthesized is mapping and synthesized.summary is not defined %}
             {% for src, data in synthesized.items() %}
               <h6>{{ src }}</h6>
               <p>{{ data.summary }}</p>
-              <div class="small text-muted">Citations: {{ data.citations|join('; ') }}</div>
+              <div class="small text-muted">{{ t('rag_citations') }}: {{ data.citations|join('; ') }}</div>
             {% endfor %}
           {% else %}
             <p>{{ synthesized.summary }}</p>
-            <div class="small text-muted">Citations: {{ synthesized.citations|join('; ') }}</div>
+            <div class="small text-muted">{{ t('rag_citations') }}: {{ synthesized.citations|join('; ') }}</div>
           {% endif %}
         </div>
       </div>
     {% endif %}
     {% if results is mapping %}
       {% for src, items in results.items() %}
-        <h4 class="mt-3">Source: {{ src }}</h4>
+        <h4 class="section-title">{{ t('rag_source_prefix') }} {{ src }}</h4>
         {% if items %}
-          <ul class="list-group mb-2">
+          <ul class="list-group mb-2 result-list">
             {% for doc, score in items %}
               <li class="list-group-item">
-                <div><strong>score={{ '%.3f'|format(score) }}</strong> — {{ doc.metadata.document_name }} p.{{ doc.metadata.page_number }}</div>
+                <div class="result-meta"><strong>score={{ '%.3f'|format(score) }}</strong> — {{ doc.metadata.document_name }} p.{{ doc.metadata.page_number }}</div>
                 <div class="mt-2">{{ doc.page_content[:600] }}...</div>
               </li>
             {% endfor %}
           </ul>
         {% else %}
-          <div class="text-muted">No results from {{ src }}</div>
+          <div class="text-muted">{{ t('rag_no_results') }} {{ src }}</div>
         {% endif %}
       {% endfor %}
     {% else %}
-      <ul class="list-group">
+      <ul class="list-group result-list">
         {% for doc, score in results %}
           <li class="list-group-item">
-            <div><strong>score={{ '%.3f'|format(score) }}</strong> — {{ doc.metadata.document_name }} p.{{ doc.metadata.page_number }}</div>
+            <div class="result-meta"><strong>score={{ '%.3f'|format(score) }}</strong> — {{ doc.metadata.document_name }} p.{{ doc.metadata.page_number }}</div>
             <div class="mt-2">{{ doc.page_content[:600] }}...</div>
           </li>
         {% endfor %}

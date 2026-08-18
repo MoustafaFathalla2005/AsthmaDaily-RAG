@@ -1,29 +1,30 @@
 {% extends 'base.html' %}
+{% block title %}{{ t('export_title') }} — {{ t('brand') }}{% endblock %}
 
 {% block content %}
-  <div class="text-end mb-3"><small>{{ 'Generated:' if request.cookies.get('lang')!='ar' else 'تاريخ الإنشاء:' }} {{ summary.generated_at }}</small></div>
-  <h1>{{ 'Patient summary for clinician' if request.cookies.get('lang')!='ar' else 'ملخص المريض للطبيب' }} — AsthmaDaily</h1>
-  <p>{{ 'This summary shows asthma status and reported exposures over the last 30 days.' if request.cookies.get('lang')!='ar' else 'هذا الملخص يعرض حالة الربو والتعرضات المبلغ عنها خلال آخر 30 يومًا.' }}</p>
+  <div class="text-end mb-3"><small>{{ t('export_generated') }} {{ summary.generated_at }}</small></div>
+  <h1>{{ t('export_title') }} — {{ t('brand') }}</h1>
+  <p>{{ t('export_intro') }}</p>
 
-  <h4>أهم النقاط</h4>
+  <h4 class="section-title">{{ t('export_key_points') }}</h4>
   <ul>
-    <li>أيام ظهور أعراض خلال 30 يوم: <strong>{{ summary.symptom_days_30 }}</strong></li>
-    <li>ليالي بوجود أعراض: <strong>{{ summary.night_symptoms_30 }}</strong></li>
-    <li>أيام قيد النشاط: <strong>{{ summary.activity_limit_30 }}</strong></li>
+    <li>{{ t('export_symptom_days') }}: <strong>{{ summary.symptom_days_30 }}</strong></li>
+    <li>{{ t('export_night_symptoms') }}: <strong>{{ summary.night_symptoms_30 }}</strong></li>
+    <li>{{ t('export_activity_days') }}: <strong>{{ summary.activity_limit_30 }}</strong></li>
   </ul>
 
-  <h4>التعرضات الأكثر تكرارًا</h4>
+  <h4 class="section-title">{{ t('export_top_exposures') }}</h4>
   {% if summary.top_exposures_30 %}
     <ul>
       {% for ex, c in summary.top_exposures_30 %}
-        <li>{{ ex }} — {{ c }} أيام</li>
+        <li>{{ t('exposure_' ~ ex) }} — {{ c }} {{ t('export_days_suffix') }}</li>
       {% endfor %}
     </ul>
   {% else %}
-    <div class="text-muted">لا توجد تعرضات مسجلة.</div>
+    <div class="text-muted">{{ t('export_no_exposures') }}</div>
   {% endif %}
 
   <hr>
-  <div class="text-muted">طباعة: استخدم زر Print في المتصفح أو حمّل نسخة PDF عبر /export/doctor_summary.pdf إن كان متاحًا.</div>
+  <div class="text-muted">{{ t('export_print_tip') }}</div>
 
 {% endblock %}

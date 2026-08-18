@@ -1,35 +1,230 @@
+/* =========================================================================
+   AsthmaDaily - Design System
+   =========================================================================
+   A small, self-contained set of design tokens (CSS variables) plus
+   component styles layered on top of Bootstrap. Goals:
+     1. Modern, calm clinical look (soft teal/blue, generous whitespace)
+     2. Flexible / fluid: clamp()-based spacing & type so it holds up from
+        a small phone to a wide desktop without extra breakpoints
+     3. First-class RTL: every rule that assumes a direction has an
+        [dir="rtl"] counterpart instead of hard-coding left/right
+   ========================================================================= */
+
 :root{
-  --primary:#0d6efd;
-  --muted:#6c757d;
+  /* --- Brand palette --- */
+  --primary:#0f7f74;         /* calm clinical teal, replaces plain bootstrap blue */
+  --primary-2:#0d6efd;       /* secondary accent for gradients / hero */
+  --primary-ink:#08554d;
+  --muted:#64748b;
+  --ink:#0f2733;
+
+  /* --- Surfaces --- */
+  --page-bg:#f3f6f7;
   --card-bg:#ffffff;
-  --page-bg:#f4f6f8;
+  --card-border:rgba(15,39,51,0.06);
+  --card-shadow:0 1px 2px rgba(15,39,51,0.04), 0 10px 24px -14px rgba(15,39,51,0.18);
+  --card-shadow-hover:0 4px 10px rgba(15,39,51,0.06), 0 20px 34px -16px rgba(15,39,51,0.22);
+
+  /* --- Status colors --- */
+  --good:#0f9d58;
+  --ok:#e0a800;
+  --bad:#dc3545;
+
+  /* --- Fluid spacing scale --- */
+  --space-xs: clamp(0.35rem, 0.3rem + 0.2vw, 0.5rem);
+  --space-sm: clamp(0.6rem, 0.5rem + 0.4vw, 0.9rem);
+  --space-md: clamp(1rem, 0.85rem + 0.6vw, 1.5rem);
+  --space-lg: clamp(1.5rem, 1.2rem + 1.2vw, 2.5rem);
+
+  /* --- Radius --- */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-pill: 999px;
+
+  --font-en: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-ar: 'Cairo', 'Inter', system-ui, -apple-system, 'Segoe UI', Tahoma, Arial, sans-serif;
 }
-body{background:var(--page-bg);font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
-.navbar-brand{font-weight:700}
-.content{max-width:980px;margin:0 auto}
-.card{background:var(--card-bg);border:1px solid rgba(0,0,0,0.04);border-radius:10px}
-.btn-primary{background:var(--primary);border-color:var(--primary)}
-h1,h4{color:#0b2d4a}
-.small-muted{color:var(--muted)}
-.form-label{font-weight:600}
-/* tidy checkbox layout */
-.form-check-inline{margin-right:12px}
-/* responsive textarea */
-textarea.form-control{min-height:64px}
-/* simple hero */
-.hero{padding:36px;background:linear-gradient(90deg, rgba(13,110,253,0.06), rgba(13,110,253,0.02));border-radius:10px}
 
-/* toast placement */
-.toast-container{position:fixed;top:20px;right:20px;z-index:1055}
+*{ box-sizing: border-box; }
 
-/* RTL support */
-.rtl{direction:rtl;text-align:right}
-.rtl .form-check-inline{margin-right:0;margin-left:12px}
+html{ scroll-behavior: smooth; }
 
-/* badges for severity */
-.badge-good{background:#198754;color:#fff}
-.badge-ok{background:#ffc107;color:#000}
-.badge-bad{background:#dc3545;color:#fff}
+body{
+  background:
+    radial-gradient(1200px 480px at 10% -10%, rgba(15,127,116,0.06), transparent 60%),
+    var(--page-bg);
+  font-family: var(--font-en);
+  color: var(--ink);
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1rem);
+}
+body.lang-ar{ font-family: var(--font-ar); }
 
-/* small icon spacing */
-.bi {vertical-align:-0.125em;margin-inline-end:6px}
+.content{ max-width: 1040px; margin: 0 auto; padding-inline: var(--space-md); }
+
+h1,h2,h3,h4,h5{ color: var(--ink); font-weight: 700; letter-spacing: -0.01em; }
+h1{ font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.2rem); }
+.section-title{ margin-top: var(--space-lg); margin-bottom: var(--space-sm); font-size: 1.15rem; }
+.page-head{ margin-bottom: var(--space-md); }
+.text-muted{ color: var(--muted) !important; }
+
+/* ---------------------------------------------------------------- Navbar */
+.app-navbar{
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: saturate(160%) blur(10px);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--card-border);
+  padding-block: var(--space-sm);
+}
+.navbar-brand{
+  font-weight: 800;
+  color: var(--primary-ink) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand-mark{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff; font-size: 1rem;
+}
+.app-navbar .nav-link{
+  color: var(--ink);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.9rem;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link.active{
+  background: rgba(15,127,116,0.10);
+  color: var(--primary-ink);
+}
+.nav-actions{ margin-inline-start: auto; }
+.lang-switch .btn-lang{
+  border: 1px solid var(--card-border);
+  background: #fff;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.7rem;
+}
+.lang-switch .btn-lang.active{
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.lang-switch .btn-lang:first-child{ border-start-start-radius: var(--radius-pill); border-end-start-radius: var(--radius-pill); }
+.lang-switch .btn-lang:last-child{ border-start-end-radius: var(--radius-pill); border-end-end-radius: var(--radius-pill); }
+
+/* ------------------------------------------------------------------ Hero */
+.hero{
+  padding: var(--space-lg);
+  background: linear-gradient(120deg, rgba(15,127,116,0.10), rgba(13,110,253,0.05));
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+}
+.hero-grid{
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+.hero-copy{ flex: 1 1 320px; }
+.hero .lead{ color: var(--muted); font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); }
+.hero-actions{ display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
+.hero-visual{ flex: 0 1 220px; max-width: 220px; margin-inline-start: auto; }
+.hero-visual svg{ width: 100%; height: auto; display: block; }
+
+.feature-grid{ margin-top: var(--space-lg); }
+.feature-card{ border: 1px solid var(--card-border); box-shadow: var(--card-shadow); transition: transform .15s ease, box-shadow .15s ease; }
+.feature-card:hover{ transform: translateY(-2px); box-shadow: var(--card-shadow-hover); }
+.feature-icon{
+  width: 42px; height: 42px; border-radius: var(--radius-sm);
+  background: rgba(15,127,116,0.10); color: var(--primary-ink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: var(--space-sm);
+}
+
+/* ------------------------------------------------------------------ Card */
+.card{
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+}
+.form-card{ box-shadow: var(--card-shadow); }
+
+/* --------------------------------------------------------------- Buttons */
+.btn{ border-radius: var(--radius-pill); font-weight: 600; padding-inline: 1.1rem; }
+.btn-primary{ background: var(--primary); border-color: var(--primary); }
+.btn-primary:hover, .btn-primary:focus{ background: var(--primary-ink); border-color: var(--primary-ink); }
+.btn-outline-primary{ color: var(--primary-ink); border-color: var(--primary); }
+.btn-outline-primary:hover{ background: var(--primary); border-color: var(--primary); }
+.btn-outline-success{ border-radius: var(--radius-pill); }
+.btn i{ margin-inline-end: 0.4rem; }
+
+/* ---------------------------------------------------------------- Forms */
+.form-label{ font-weight: 600; color: var(--ink); }
+.form-control, .form-select{
+  border-radius: var(--radius-sm);
+  border-color: var(--card-border);
+  padding: 0.55rem 0.75rem;
+}
+.form-control:focus, .form-select:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(15,127,116,0.15);
+}
+textarea.form-control{ min-height: 64px; }
+
+.exposure-chips{ display: flex; flex-wrap: wrap; gap: var(--space-xs); padding-block: var(--space-xs); }
+.exposure-chip{
+  margin: 0 !important;
+  background: #f8fafc;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.7rem 0.35rem 0.5rem;
+}
+[dir="rtl"] .exposure-chip{ padding: 0.35rem 0.5rem 0.35rem 0.7rem; }
+.exposure-chip .form-check-input{ margin-inline-end: 0.35rem; margin-inline-start: 0; }
+.exposure-chip .form-check-label{ font-weight: 500; }
+
+/* ----------------------------------------------------------------- Lists */
+.entry-list .list-group-item,
+.result-list .list-group-item{
+  border-color: var(--card-border);
+  padding: var(--space-sm) var(--space-md);
+}
+.entry-list .list-group-item:first-child,
+.result-list .list-group-item:first-child{ border-top-left-radius: var(--radius-md); border-top-right-radius: var(--radius-md); }
+.entry-list .list-group-item:last-child,
+.result-list .list-group-item:last-child{ border-bottom-left-radius: var(--radius-md); border-bottom-right-radius: var(--radius-md); }
+.result-meta{ color: var(--primary-ink); }
+.stat-row{ display: flex; justify-content: space-between; padding-block: 0.2rem; }
+
+.llm-answer{ white-space: pre-wrap; background: transparent; border: none; font-family: inherit; margin: 0; }
+
+/* ---------------------------------------------------------------- Badges */
+.badge-good{ background: var(--good); color: #fff; }
+.badge-ok{ background: var(--ok); color: #1a1a1a; }
+.badge-bad{ background: var(--bad); color: #fff; }
+
+/* ----------------------------------------------------------------- Toast */
+.toast-container{ position: fixed; top: 20px; inset-inline-end: 20px; z-index: 1055; }
+
+/* ------------------------------------------------------------------- Bi */
+.bi{ vertical-align: -0.125em; }
+
+/* --------------------------------------------------------------- Print */
+@media print{
+  .app-navbar, .toast-container, form, .hero-actions{ display: none !important; }
+  body{ background: #fff; }
+  .card{ box-shadow: none; border-color: #ddd; }
+}
+
+/* ------------------------------------------------------------ Responsive */
+@media (max-width: 767.98px){
+  .hero-visual{ display: none; }
+  .nav-actions{ margin-inline-start: 0; margin-top: var(--space-sm); flex-wrap: wrap; }
+}

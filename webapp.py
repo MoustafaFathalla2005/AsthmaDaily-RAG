@@ -5,6 +5,8 @@ import os
 from pathlib import Path
 from datetime import datetime, timedelta
 
+from translations import get_translator
+
 try:
     import openai
     OPENAI_AVAILABLE = True
@@ -18,6 +20,13 @@ DEBUG_SAMPLE_ENABLED = os.environ.get('DEBUG_SAMPLE_ENABLED', 'true').lower() in
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
 PDF_ENABLED = os.environ.get('PDF_ENABLED', 'true').lower() in ('1', 'true', 'yes')
 
+# Canonical exposure values are always stored/filtered in English so old data
+# and the eval/report pipeline stay stable; only the *label* shown to the
+# user is translated (see translations.py, keys "exposure_<value>").
+EXPOSURE_OPTIONS = ['Dust', 'Smoke', 'Pets', 'Exercise', 'Cold air', 'Strong smells', 'Air pollution']
+
+SUPPORTED_LANGS = ('en', 'ar')
+
 # Load vector DB if available
 try:
     vectordb = q.load_index()
@@ -30,6 +39,19 @@ except Exception as e:
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
 DIARY_FILE = DATA_DIR / "diary.json"
+
+
+def get_lang():
+    lang = request.cookies.get('lang', 'en')
+    return lang if lang in SUPPORTED_LANGS else 'en'
+
+
+@app.context_processor
+def inject_i18n():
+    """Makes t() (translator) and lang available in every template, so a
+    page is either fully English or fully Arabic - never mixed."""
+    lang = get_lang()
+    return dict(t=get_translator(lang), lang=lang, is_rtl=(lang == 'ar'))
 
 
 def load_diary():
@@ -96,7 +118,6 @@ def index():
 @app.route('/diary', methods=['GET', 'POST'])
 def diary():
     entries = load_diary()
-    message = None
     if request.method == 'POST':
         # collect form
         entry = {
@@ -116,7 +137,8 @@ def diary():
 
     # show last 14 entries
     saved = request.args.get('saved')
-    return render_template('diary.html', entries=entries[:14], saved=saved)
+    return render_template('diary.html', entries=entries[:14], saved=saved,
+                            exposure_options=EXPOSURE_OPTIONS)
 
 
 @app.route('/dashboard')
@@ -229,11 +251,15 @@ def call_openai_summary(question, results, max_tokens=300):
             citations = f"{doc.metadata.get('document_name')} p.{doc.metadata.get('page_number')}"
             passages.append(f"[{citations}] {text[:800]}")
 
+    # Answer language follows the UI language cookie, so the LLM answer
+    # doesn't come back in a different language than the rest of the page.
+    answer_lang = 'Arabic' if get_lang() == 'ar' else 'English'
+
     prompt = (
         f"You are a clinical assistant. The user question is:\n{question}\n\nThe following extracted guideline passages are provided (each prefixed by citation):\n"
         + "\n\n".join(passages[:6])
         + (
-            "\n\nTask: Write a concise, patient-facing answer in Arabic (3-5 short sentences). "
+            f"\n\nTask: Write a concise, patient-facing answer in {answer_lang} (3-5 short sentences). "
             "Then list the citations on a separate line prefixed 'Citations:'. "
             "Be conservative: only state conclusions that are directly supported by the provided passages. "
             "Avoid hallucination or adding outside knowledge. If the passages are insufficient, say you couldn't find a clear guideline answer and suggest the user consult their clinician."

@@ -1,100 +1,113 @@
 {% extends 'base.html' %}
+{% block title %}{{ t('nav_diary') }} — {{ t('brand') }}{% endblock %}
 
 {% block content %}
-  <h1>Daily Diary</h1>
-  <p class="text-muted">Quick daily check-in. Takes about 30–60 seconds.</p>
+  <div class="page-head">
+    <h1>{{ t('diary_title') }}</h1>
+    <p class="text-muted">{{ t('diary_subtitle') }}</p>
+  </div>
 
-  <form method="post" class="row g-3 mb-4">
+  <form method="post" class="card form-card p-3 p-md-4 row g-3 mb-4">
     <div class="col-12">
-      <label class="form-label">التاريخ / Date</label>
+      <label class="form-label">{{ t('diary_date') }}</label>
       <input type="datetime-local" name="date" class="form-control" value="">
     </div>
     <div class="col-md-4">
-      <label class="form-label"><i class="bi bi-activity me-1"></i>Breathing / التنفس</label>
+      <label class="form-label"><i class="bi bi-activity me-1"></i>{{ t('diary_breathing') }}</label>
       <select name="breathing" class="form-select">
-        <option>Good</option>
-        <option>Okay</option>
-        <option>Bad</option>
+        <option value="Good">{{ t('diary_breathing_good') }}</option>
+        <option value="Okay">{{ t('diary_breathing_okay') }}</option>
+        <option value="Bad">{{ t('diary_breathing_bad') }}</option>
       </select>
     </div>
     <div class="col-md-4">
-      <label class="form-label">Symptoms</label>
+      <label class="form-label">{{ t('diary_symptoms') }}</label>
       <select name="symptoms" class="form-select">
-        <option>None</option>
-        <option>Mild</option>
-        <option>Severe</option>
+        <option value="None">{{ t('diary_symptoms_none') }}</option>
+        <option value="Mild">{{ t('diary_symptoms_mild') }}</option>
+        <option value="Severe">{{ t('diary_symptoms_severe') }}</option>
       </select>
     </div>
     <div class="col-md-4">
-      <label class="form-label"><i class="bi bi-moon me-1"></i>Night symptoms / أعراض ليلية</label>
+      <label class="form-label"><i class="bi bi-moon me-1"></i>{{ t('diary_night') }}</label>
       <select name="night_symptoms" class="form-select">
-        <option>No</option>
-        <option>Yes</option>
+        <option value="No">{{ t('diary_night_no') }}</option>
+        <option value="Yes">{{ t('diary_night_yes') }}</option>
       </select>
     </div>
 
     <div class="col-md-4">
-      <label class="form-label"><i class="bi bi-shoe-print me-1"></i>Activity / النشاط</label>
+      <label class="form-label"><i class="bi bi-shoe-print me-1"></i>{{ t('diary_activity') }}</label>
       <select name="activity" class="form-select">
-        <option>Normal</option>
-        <option>Limited</option>
+        <option value="Normal">{{ t('diary_activity_normal') }}</option>
+        <option value="Limited">{{ t('diary_activity_limited') }}</option>
       </select>
     </div>
     <div class="col-md-4">
-      <label class="form-label"><i class="bi bi-capsule me-1"></i>Medication / الدواء</label>
+      <label class="form-label"><i class="bi bi-capsule me-1"></i>{{ t('diary_medication') }}</label>
       <select name="medication" class="form-select">
-        <option>As prescribed</option>
-        <option>Missed</option>
+        <option value="As prescribed">{{ t('diary_med_prescribed') }}</option>
+        <option value="Missed">{{ t('diary_med_missed') }}</option>
       </select>
     </div>
 
     <div class="col-12">
-      <label class="form-label">التعرضات المحتملة (اختَر كل ما ينطبق) / Possible exposures</label>
-      <div class="py-2">
-        {% for ex in ['Dust','Smoke','Pets','Exercise','Cold air','Strong smells','Air pollution'] %}
-        <div class="form-check form-check-inline">
+      <label class="form-label">{{ t('diary_exposures_label') }}</label>
+      <div class="exposure-chips">
+        {% for ex in exposure_options %}
+        <div class="form-check form-check-inline exposure-chip">
           <input class="form-check-input" type="checkbox" name="exposures" value="{{ ex }}" id="ex_{{ loop.index }}">
-          <label class="form-check-label" for="ex_{{ loop.index }}">{{ ex }}</label>
+          <label class="form-check-label" for="ex_{{ loop.index }}">{{ t('exposure_' ~ ex) }}</label>
         </div>
         {% endfor %}
       </div>
     </div>
 
     <div class="col-12">
-      <label class="form-label">Notes (optional)</label>
+      <label class="form-label">{{ t('diary_notes') }}</label>
       <textarea name="notes" class="form-control" rows="2"></textarea>
     </div>
 
     <div class="col-12">
-      <button class="btn btn-primary">Save entry</button>
+      <button class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i>{{ t('diary_save') }}</button>
     </div>
   </form>
 
-  <h4 class="mt-4">Recent entries</h4>
+  <h4 class="section-title">{{ t('diary_recent') }}</h4>
   {% if entries %}
-    <ul class="list-group">
+    <ul class="list-group entry-list">
       {% for e in entries %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
+        <li class="list-group-item d-flex justify-content-between align-items-start flex-wrap gap-2">
           <div>
             <div><strong>{{ e.date[:10] }}</strong></div>
-            <div class="mt-1">{{ e.notes }}</div>
-            <div class="small text-muted mt-2">{{ 'التعرضات:' if request.cookies.get('lang')=='ar' else 'Exposures:' }} {{ e.exposures|join(', ') }}</div>
+            {% if e.notes %}<div class="mt-1">{{ e.notes }}</div>{% endif %}
+            <div class="small text-muted mt-2">{{ t('diary_exposures_prefix') }}
+              {% if e.exposures %}
+                {% set labels = [] %}
+                {% for ex in e.exposures %}{% set _ = labels.append(t('exposure_' ~ ex)) %}{% endfor %}
+                {{ labels|join(', ') }}
+              {% else %}—{% endif %}
+            </div>
           </div>
           <div class="text-end">
             {% if e.breathing=='Good' %}
-              <span class="badge badge-good">&#9679; {{ 'جيد' if request.cookies.get('lang')=='ar' else 'Good' }}</span>
+              <span class="badge badge-good">&#9679; {{ t('diary_breathing_good') }}</span>
             {% elif e.breathing=='Okay' %}
-              <span class="badge badge-ok">&#9679; {{ 'متوسط' if request.cookies.get('lang')=='ar' else 'Okay' }}</span>
+              <span class="badge badge-ok">&#9679; {{ t('diary_breathing_okay') }}</span>
             {% else %}
-              <span class="badge badge-bad">&#9679; {{ 'سيئ' if request.cookies.get('lang')=='ar' else 'Bad' }}</span>
+              <span class="badge badge-bad">&#9679; {{ t('diary_breathing_bad') }}</span>
             {% endif %}
-            <div class="small text-muted">{{ e.symptoms }} · {{ e.activity }}</div>
+            <div class="small text-muted mt-1">
+              {{ {'None': t('diary_symptoms_none'), 'Mild': t('diary_symptoms_mild'), 'Severe': t('diary_symptoms_severe')}.get(e.symptoms, e.symptoms) }}
+              ·
+              {{ {'Normal': t('diary_activity_normal'), 'Limited': t('diary_activity_limited')}.get(e.activity, e.activity) }}
+            </div>
           </div>
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <div class="text-muted">No entries yet. Start by adding today's check-in.</div>
+    <div class="text-muted">{{ t('diary_no_entries') }}</div>
   {% endif %}
 
 {% endblock %}
