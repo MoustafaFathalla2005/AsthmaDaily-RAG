@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="text-end mb-3"><small>{{ 'Generated:' if request.cookies.get('lang')!='ar' else 'تاريخ الإنشاء:' }} {{ summary.generated_at }}</small></div>
+  <h1>{{ 'Patient summary for clinician' if request.cookies.get('lang')!='ar' else 'ملخص المريض للطبيب' }} — AsthmaDaily</h1>
+  <p>{{ 'This summary shows asthma status and reported exposures over the last 30 days.' if request.cookies.get('lang')!='ar' else 'هذا الملخص يعرض حالة الربو والتعرضات المبلغ عنها خلال آخر 30 يومًا.' }}</p>
+
+  <h4>أهم النقاط</h4>
+  <ul>
+    <li>أيام ظهور أعراض خلال 30 يوم: <strong>{{ summary.symptom_days_30 }}</strong></li>
+    <li>ليالي بوجود أعراض: <strong>{{ summary.night_symptoms_30 }}</strong></li>
+    <li>أيام قيد النشاط: <strong>{{ summary.activity_limit_30 }}</strong></li>
+  </ul>
+
+  <h4>التعرضات الأكثر تكرارًا</h4>
+  {% if summary.top_exposures_30 %}
+    <ul>
+      {% for ex, c in summary.top_exposures_30 %}
+        <li>{{ ex }} — {{ c }} أيام</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-muted">لا توجد تعرضات مسجلة.</div>
+  {% endif %}
+
+  <hr>
+  <div class="text-muted">طباعة: استخدم زر Print في المتصفح أو حمّل نسخة PDF عبر /export/doctor_summary.pdf إن كان متاحًا.</div>
+
+{% endblock %}

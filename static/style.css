@@ -1,0 +1,35 @@
+:root{
+  --primary:#0d6efd;
+  --muted:#6c757d;
+  --card-bg:#ffffff;
+  --page-bg:#f4f6f8;
+}
+body{background:var(--page-bg);font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+.navbar-brand{font-weight:700}
+.content{max-width:980px;margin:0 auto}
+.card{background:var(--card-bg);border:1px solid rgba(0,0,0,0.04);border-radius:10px}
+.btn-primary{background:var(--primary);border-color:var(--primary)}
+h1,h4{color:#0b2d4a}
+.small-muted{color:var(--muted)}
+.form-label{font-weight:600}
+/* tidy checkbox layout */
+.form-check-inline{margin-right:12px}
+/* responsive textarea */
+textarea.form-control{min-height:64px}
+/* simple hero */
+.hero{padding:36px;background:linear-gradient(90deg, rgba(13,110,253,0.06), rgba(13,110,253,0.02));border-radius:10px}
+
+/* toast placement */
+.toast-container{position:fixed;top:20px;right:20px;z-index:1055}
+
+/* RTL support */
+.rtl{direction:rtl;text-align:right}
+.rtl .form-check-inline{margin-right:0;margin-left:12px}
+
+/* badges for severity */
+.badge-good{background:#198754;color:#fff}
+.badge-ok{background:#ffc107;color:#000}
+.badge-bad{background:#dc3545;color:#fff}
+
+/* small icon spacing */
+.bi {vertical-align:-0.125em;margin-inline-end:6px}

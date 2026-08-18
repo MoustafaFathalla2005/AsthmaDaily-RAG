@@ -198,6 +198,85 @@ computes, per embedding model:
 
 ## Next step (not built here)
 
+## Local UI: AsthmaDaily (this fork)
+
+This workspace includes a small Flask-based UI (`webapp.py`) that demonstrates a
+patient-facing product surface called "AsthmaDaily". Key features added here:
+
+- Daily diary: `/diary` — quick daily check-ins saved to `data/diary.json`.
+- Dashboard: `/dashboard` — weekly and 30-day summaries and simple exposure pattern detection.
+- Clinical Q&A (RAG): `/ask_form` + `/ask` — retrieve guideline passages with source/page citations.
+- Local synthesis: `/synthesize` — a simple synthesizer that builds a concise answer from retrieved passages and lists citations. (This is a local, concatenation-based synthesizer; for abstractive LLM summaries we can add OpenAI/LLM integration later.)
+- Export: `/export/doctor_summary` — printable HTML summary for clinicians; `/export/doctor_summary.pdf` attempts PDF generation via `pdfkit` + `wkhtmltopdf` if installed on your system.
+
+How to run the UI:
+
+```bash
+pip install -r requirements.txt
+python webapp.py
+```
+
+Open `http://127.0.0.1:5000` in your browser.
+
+PDF notes: `pdfkit` requires an external `wkhtmltopdf` binary installed on your system. If not available, the app falls back to serving a printable HTML page.
+
+Arabic UX: templates include Arabic labels and copy to make the app friendlier to Arabic-speaking users. You can further polish copy and RTL layout as needed.
+
+## Enabling LLM (OpenAI) and testing PDF export
+
+If you want to enable abstractive LLM summaries and test PDF export, follow these steps.
+
+1) Create a `.env` file (or export environment variables). You can copy the example:
+
+```powershell
+copy .env.example .env
+# or set in PowerShell session:
+$env:OPENAI_API_KEY = "sk-..."
+$env:OPENAI_MODEL = "gpt-4o-mini"   # optional
+python webapp.py
+```
+
+On macOS / Linux:
+
+```bash
+cp .env.example .env
+export OPENAI_API_KEY="sk-..."
+export OPENAI_MODEL="gpt-4o-mini"
+python webapp.py
+```
+
+2) Install `wkhtmltopdf` for PDF exports (optional but recommended):
+
+- Windows (Chocolatey):
+
+```powershell
+choco install wkhtmltopdf
+```
+
+- Windows (manual): Download the installer from https://wkhtmltopdf.org/downloads.html and add the install folder to your PATH.
+
+- macOS (Homebrew):
+
+```bash
+brew install wkhtmltopdf
+```
+
+3) Test LLM and PDF generation quickly using the built-in debug endpoint after the server is running:
+
+Open in your browser or use curl/Invoke-WebRequest:
+
+```
+http://127.0.0.1:5000/debug/sample
+```
+
+This endpoint will attempt to retrieve a few passages, synthesize an Arabic LLM answer if `OPENAI_API_KEY` is set and `openai` is installed, and try to write `outputs/sample_doctor_summary.pdf`. If PDF generation fails, an HTML preview and an error comment are returned in the response.
+
+Notes:
+- If `OPENAI_API_KEY` is not set or the `openai` package isn't available, the app falls back to a local concatenation-based synthesizer.
+- Keep `wkhtmltopdf` on your PATH so `pdfkit` can find it; otherwise the app will render printable HTML as a fallback.
+
+If you want, I can also translate any remaining English strings into Arabic (or vice-versa) across the templates — tell me whether you want full Arabic UI, full English UI, or a toggle switch approach.
+
 As noted at the end of the Day 2 notebook: constrain the LLM to answer only from retrieved
 chunks, with `document_name` + `page_number` citations on every claim, and an explicit
 GINA-vs-WHO split whenever the two guidelines differ for a child/adolescent question. The

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Dashboard</h1>
+  <p class="text-muted">Quick overview of your recent asthma control and potential patterns.</p>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">{{ 'هذا الأسبوع' if request.cookies.get('lang')=='ar' else 'This week' }}</h5>
+          {% if week.control_status=='good' %}
+            <span class="badge badge-good"><i class="bi bi-check-circle me-1"></i>{{ 'متحكم' if request.cookies.get('lang')=='ar' else 'Good' }}</span>
+          {% elif week.control_status=='ok' %}
+            <span class="badge badge-ok"><i class="bi bi-exclamation-circle me-1"></i>{{ 'متوسط' if request.cookies.get('lang')=='ar' else 'Fair' }}</span>
+          {% else %}
+            <span class="badge badge-bad"><i class="bi bi-x-circle me-1"></i>{{ 'غير متحكم' if request.cookies.get('lang')=='ar' else 'Poor' }}</span>
+          {% endif %}
+        </div>
+        <div class="mt-2">{{ 'أيام بلا أعراض' if request.cookies.get('lang')=='ar' else 'Symptom-free days' }}: <strong>{{ week.symptom_free_days }}/{{ week.total_days }}</strong></div>
+        <div>{{ 'أعراض ليلية' if request.cookies.get('lang')=='ar' else 'Night symptoms' }}: <strong>{{ week.night_symptoms }}</strong></div>
+        <div>{{ 'قيود النشاط' if request.cookies.get('lang')=='ar' else 'Activity limitations' }}: <strong>{{ week.activity_limited }}</strong></div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h5>Potential patterns (top exposures)</h5>
+        {% if week.exposures %}
+          <ul class="list-group list-group-flush">
+            {% for ex, count in week.exposures[:5] %}
+              <li class="list-group-item d-flex justify-content-between"> <div>{{ ex }}</div> <div class="text-muted">{{ count }} days</div></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="text-muted">No exposure pattern detected yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <h4>Doctor summary (last 30 days)</h4>
+  <div class="card p-3">
+    <div>Symptom days: <strong>{{ doctor_summary.symptom_days_30 }}</strong></div>
+    <div>Night symptoms: <strong>{{ doctor_summary.night_symptoms_30 }}</strong></div>
+    <div>Activity-limited days: <strong>{{ doctor_summary.activity_limit_30 }}</strong></div>
+    <div class="mt-2">Top reported exposures:</div>
+    <ul>
+      {% for ex, c in doctor_summary.top_exposures_30 %}
+        <li>{{ ex }} — {{ c }} days</li>
+      {% endfor %}
+    </ul>
+    <div class="mt-2 text-muted">Tip: Bring this summary to your next appointment.</div>
+  </div>
+
+{% endblock %}
