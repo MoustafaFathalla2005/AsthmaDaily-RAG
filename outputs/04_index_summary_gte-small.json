@@ -1,0 +1,7 @@
+{
+  "embedding_model_id": "gte-small",
+  "model_name": "thenlper/gte-small",
+  "n_chunks_indexed": 1054,
+  "collection_name": "asthmadaily_gina_who_2026_gte-small",
+  "persist_directory": "C:\\Users\\ADAM-LAP\\Downloads\\asthmadaily_rag (1)\\asthmadaily_rag\\vector_db\\gte-small"
+}

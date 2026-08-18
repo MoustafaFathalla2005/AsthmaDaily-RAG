@@ -1,0 +1,88 @@
+{
+  "k": 3,
+  "n_scored_questions": 10,
+  "avg_precision_at_k": 0.03333333333333333,
+  "hit_rate_at_k": 0.1,
+  "mrr": 0.05,
+  "out_of_scope_control": {
+    "question": "What is the recommended antibiotic dose for pneumonia in adults?",
+    "top_score": 0.333869733634896
+  },
+  "multi_source_question": {
+    "question": "Multi-source: what age-specific differences exist between GINA and WHO on ICS use in young children?",
+    "gina_hits": 3,
+    "who_hits": 3
+  },
+  "per_question": [
+    {
+      "question": "What factors are used to assess the level of asthma symptom control?",
+      "expected": "GINA 2026, Page 205",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "What are the risk factors for future asthma exacerbations?",
+      "expected": "GINA 2026, Page 40",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "Can exercise trigger asthma symptoms?",
+      "expected": "GINA 2026, Page 30",
+      "precision_at_k": 0.3333333333333333,
+      "hit": 1,
+      "rank": 2
+    },
+    {
+      "question": "Does air pollution worsen asthma symptoms?",
+      "expected": "GINA 2026, Page 42",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "What is a written asthma action plan and who should have one?",
+      "expected": "GINA 2026, Page 37",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "What is the stepwise pharmacological approach to asthma treatment?",
+      "expected": "GINA 2026, Page 79",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "What is MART therapy for asthma?",
+      "expected": "WHO 2026, Page 28",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "What inhaled corticosteroid doses are recommended for children with asthma?",
+      "expected": "WHO 2026, Page 26",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "How should an acute asthma exacerbation be managed in a child?",
+      "expected": "WHO 2026, Page 26",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    },
+    {
+      "question": "What follow-up is recommended after an asthma exacerbation in children?",
+      "expected": "WHO 2026, Page 53",
+      "precision_at_k": 0.0,
+      "hit": 0,
+      "rank": null
+    }
+  ]
+}

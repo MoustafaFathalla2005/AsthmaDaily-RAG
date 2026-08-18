@@ -1,0 +1,26 @@
+# AsthmaDaily RAG - Requirements
+# Install with: pip install -r requirements.txt
+
+# --- PDF Parsing ---
+pypdf>=4.0.0
+cryptography>=3.1
+langchain-community>=0.2.0
+
+# --- Chunking ---
+langchain-text-splitters>=0.2.0
+
+# --- Embeddings (HuggingFace backends) ---
+langchain-huggingface>=0.0.3
+sentence-transformers>=3.0.0
+
+# --- Embeddings (offline TF-IDF/SVD baseline) ---
+scikit-learn>=1.4.0
+
+# --- Vector DB ---
+langchain-chroma>=0.1.0
+chromadb>=0.5.0
+
+# --- Data / Notebooks ---
+pandas>=2.0.0
+numpy>=1.26.0
+# jupyter>=1.0.0

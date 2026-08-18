@@ -1,0 +1,7 @@
+{
+  "embedding_model_id": "bge-small-en",
+  "model_name": "BAAI/bge-small-en-v1.5",
+  "n_chunks_indexed": 1054,
+  "collection_name": "asthmadaily_gina_who_2026_bge-small-en",
+  "persist_directory": "C:\\Users\\ADAM-LAP\\Downloads\\asthmadaily_rag (1)\\asthmadaily_rag\\vector_db\\bge-small-en"
+}

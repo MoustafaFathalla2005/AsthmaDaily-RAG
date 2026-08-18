@@ -1,0 +1,6 @@
+vector_db/
+outputs/fitted_*/
+__pycache__/
+*.pyc
+venv/
+.env

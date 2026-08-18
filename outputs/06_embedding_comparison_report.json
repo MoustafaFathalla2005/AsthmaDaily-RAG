@@ -1,0 +1,58 @@
+[
+  {
+    "id": "minilm-l6-v2",
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "type": "huggingface",
+    "description": "Light, fast general-purpose sentence embedding model. Good default baseline for RAG prototypes.",
+    "status": "ok",
+    "build_seconds": 49.24,
+    "eval_seconds": 0.18,
+    "avg_precision_at_k": 0.033,
+    "hit_rate_at_k": 0.1,
+    "mrr": 0.05,
+    "n_scored_questions": 10,
+    "out_of_scope_top_score": 0.334
+  },
+  {
+    "id": "bge-small-en",
+    "model_name": "BAAI/bge-small-en-v1.5",
+    "type": "huggingface",
+    "description": "Retrieval-tuned embedding model (trained with contrastive retrieval objectives). Usually stronger than MiniLM on question-to-passage retrieval tasks like ours.",
+    "status": "ok",
+    "build_seconds": 173.82,
+    "eval_seconds": 0.3,
+    "avg_precision_at_k": 0.033,
+    "hit_rate_at_k": 0.1,
+    "mrr": 0.033,
+    "n_scored_questions": 10,
+    "out_of_scope_top_score": 0.596
+  },
+  {
+    "id": "gte-small",
+    "model_name": "thenlper/gte-small",
+    "type": "huggingface",
+    "description": "General Text Embeddings model, competitive with bge-small on retrieval benchmarks, included as a third comparison point.",
+    "status": "ok",
+    "build_seconds": 1342.57,
+    "eval_seconds": 0.77,
+    "avg_precision_at_k": 0.033,
+    "hit_rate_at_k": 0.1,
+    "mrr": 0.1,
+    "n_scored_questions": 10,
+    "out_of_scope_top_score": 0.786
+  },
+  {
+    "id": "tfidf-svd",
+    "model_name": "tfidf+truncated_svd(384)",
+    "type": "tfidf_svd",
+    "description": "Offline TF-IDF + LSA baseline (no internet/model download required). Fit on the project's own corpus. Used to validate the pipeline end-to-end and as a lower-bound comparison point against the transformer-based models above.",
+    "status": "ok",
+    "build_seconds": 6.44,
+    "eval_seconds": 0.33,
+    "avg_precision_at_k": 0.0,
+    "hit_rate_at_k": 0.0,
+    "mrr": 0.0,
+    "n_scored_questions": 10,
+    "out_of_scope_top_score": 0.626
+  }
+]

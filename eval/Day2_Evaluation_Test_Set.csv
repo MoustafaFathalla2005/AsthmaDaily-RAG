@@ -1,0 +1,13 @@
+Question,Expected Source (Document / Section / Page),Notes
+"What factors are used to assess the level of asthma symptom control?","GINA 2026, Page 205","GINA control assessment table"
+"What are the risk factors for future asthma exacerbations?","GINA 2026, Page 40","GINA risk factor list"
+"Can exercise trigger asthma symptoms?","GINA 2026, Page 30","Exercise-induced bronchoconstriction section"
+"Does air pollution worsen asthma symptoms?","GINA 2026, Page 42","Environmental trigger discussion"
+"What is a written asthma action plan and who should have one?","GINA 2026, Page 37","Self-management education section"
+"What is the stepwise pharmacological approach to asthma treatment?","GINA 2026, Page 79","GINA treatment steps"
+"What is MART therapy for asthma?","WHO 2026, Page 28","Maintenance and reliever therapy for children/adolescents"
+"What inhaled corticosteroid doses are recommended for children with asthma?","WHO 2026, Page 26","WHO pediatric ICS dosing"
+"How should an acute asthma exacerbation be managed in a child?","WHO 2026, Page 26","WHO acute exacerbation management"
+"What follow-up is recommended after an asthma exacerbation in children?","WHO 2026, Page 53","WHO follow-up care recommendations"
+"What is the recommended antibiotic dose for pneumonia in adults?","Not covered — out of scope","Deliberate out-of-scope control question (not an asthma question)"
+"Multi-source: what age-specific differences exist between GINA and WHO on ICS use in young children?","GINA 2026 + WHO 2026 — multi-page, cross-source","Requires fusing both sources; used to test source-aware retrieval, not single-page precision"
