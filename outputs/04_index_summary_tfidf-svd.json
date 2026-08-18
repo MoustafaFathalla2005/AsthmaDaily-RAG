@@ -1,7 +1,7 @@
 {
   "embedding_model_id": "tfidf-svd",
   "model_name": "tfidf+truncated_svd(384)",
-  "n_chunks_indexed": 1054,
+  "n_chunks_indexed": 1092,
   "collection_name": "asthmadaily_gina_who_2026_tfidf-svd",
-  "persist_directory": "C:\\Users\\ADAM-LAP\\Downloads\\asthmadaily_rag (1)\\asthmadaily_rag\\vector_db\\tfidf-svd"
+  "persist_directory": "D:\\somethinges\\courses\\Creativa\\AI --orange -instant\\AsthmaDaily-RAG\\vector_db\\tfidf-svd"
 }

@@ -1,0 +1,24 @@
+{
+  "ingestion": {
+    "pages": 405,
+    "chunks": 1092
+  },
+  "eval": {
+    "precision_at_k_mean": 0.5833333333333334,
+    "top_score_mean": 0.6522507959168939,
+    "citation_match_count": 0,
+    "queries_evaluated": 12
+  },
+  "calibration": {
+    "answerable_scores": [
+      0.72641268909684,
+      0.6418279048658114,
+      0.7122805136163491
+    ],
+    "unanswerable_scores": [
+      0.6253864192617117,
+      0.6288589824042212
+    ],
+    "suggested_threshold": 0.6353434436350163
+  }
+}

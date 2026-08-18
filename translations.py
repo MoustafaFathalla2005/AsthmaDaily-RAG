@@ -71,6 +71,7 @@ TRANSLATIONS = {
         "diary_recent": "Recent entries",
         "diary_no_entries": "No entries yet. Start by adding today's check-in.",
         "diary_exposures_prefix": "Exposures:",
+        "choose": "Choose...",
 
         # --- Dashboard ---
         "dashboard_title": "Dashboard",
@@ -178,6 +179,7 @@ TRANSLATIONS = {
         "diary_recent": "أحدث الإدخالات",
         "diary_no_entries": "لا توجد إدخالات بعد. ابدأ بإضافة تسجيل اليوم.",
         "diary_exposures_prefix": "التعرضات:",
+        "choose": "اختر...",
 
         # --- Dashboard ---
         "dashboard_title": "لوحة المتابعة",

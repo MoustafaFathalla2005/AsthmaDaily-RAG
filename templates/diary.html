@@ -15,6 +15,7 @@
     <div class="col-md-4">
       <label class="form-label"><i class="bi bi-activity me-1"></i>{{ t('diary_breathing') }}</label>
       <select name="breathing" class="form-select">
+        <option disabled selected>{{ t('choose') }}</option>
         <option value="Good">{{ t('diary_breathing_good') }}</option>
         <option value="Okay">{{ t('diary_breathing_okay') }}</option>
         <option value="Bad">{{ t('diary_breathing_bad') }}</option>
@@ -23,6 +24,7 @@
     <div class="col-md-4">
       <label class="form-label">{{ t('diary_symptoms') }}</label>
       <select name="symptoms" class="form-select">
+        <option disabled selected>{{ t('choose') }}</option>
         <option value="None">{{ t('diary_symptoms_none') }}</option>
         <option value="Mild">{{ t('diary_symptoms_mild') }}</option>
         <option value="Severe">{{ t('diary_symptoms_severe') }}</option>
@@ -31,6 +33,7 @@
     <div class="col-md-4">
       <label class="form-label"><i class="bi bi-moon me-1"></i>{{ t('diary_night') }}</label>
       <select name="night_symptoms" class="form-select">
+        <option disabled selected>{{ t('choose') }}</option>
         <option value="No">{{ t('diary_night_no') }}</option>
         <option value="Yes">{{ t('diary_night_yes') }}</option>
       </select>
@@ -39,6 +42,7 @@
     <div class="col-md-4">
       <label class="form-label"><i class="bi bi-shoe-print me-1"></i>{{ t('diary_activity') }}</label>
       <select name="activity" class="form-select">
+        <option disabled selected>{{ t('choose') }}</option>
         <option value="Normal">{{ t('diary_activity_normal') }}</option>
         <option value="Limited">{{ t('diary_activity_limited') }}</option>
       </select>
@@ -46,6 +50,7 @@
     <div class="col-md-4">
       <label class="form-label"><i class="bi bi-capsule me-1"></i>{{ t('diary_medication') }}</label>
       <select name="medication" class="form-select">
+        <option disabled selected>{{ t('choose') }}</option>
         <option value="As prescribed">{{ t('diary_med_prescribed') }}</option>
         <option value="Missed">{{ t('diary_med_missed') }}</option>
       </select>
